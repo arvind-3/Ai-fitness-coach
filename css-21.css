@@ -1,0 +1,117 @@
+/* Shared styles for all pages */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* Loading animation */
+.loading-spinner {
+    animation: spin 1s linear infinite;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    height: 20px;
+    width: 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Standard buttons */
+.btn-primary {
+    @apply bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded transition duration-200;
+}
+
+.btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded transition duration-200;
+}
+
+/* Mobile menu */
+.mobile-menu {
+    @apply hidden md:hidden;
+}
+
+.mobile-menu.active {
+    @apply block;
+}
+
+/* Back to top button */
+.back-to-top {
+    @apply fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300;
+}
+
+.back-to-top.visible {
+    @apply opacity-100 visible;
+}
+
+/* Settings Page Specific Styles */
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-button {
+    @apply px-4 py-2 font-medium text-sm whitespace-nowrap;
+}
+
+.tab-button.active {
+    @apply border-b-2 border-green-500 text-green-600;
+}
+
+/* Theme Selection */
+.theme-option {
+    @apply p-2 rounded-lg cursor-pointer transition-all duration-300;
+}
+
+.theme-option:hover {
+    transform: scale(1.05);
+}
+
+.theme-option.selected {
+    @apply border-2 border-green-500;
+}
+
+/* Toggle Switches */
+.toggle-checkbox {
+    @apply sr-only;
+}
+
+.toggle-label {
+    @apply relative w-12 h-6 bg-gray-300 rounded-full transition-all duration-300 ease-in-out;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+    @apply bg-green-500;
+}
+
+/* Form Improvements */
+.form-input {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline;
+}
+
+.form-input:focus {
+    @apply ring-2 ring-green-300 border-green-400;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .settings-container {
+        @apply px-2;
+    }
+    
+    .tab-button {
+        @apply px-3 py-1 text-xs;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head content remains the same as original -->
+    <style>
+        /* Additional styles */
+        .meal-section-header {
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .search-highlight {
+            background-color: #fef08a;
+        }
+        .meal-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            margin-left: 0.5rem;
+        }
+        .veg-badge {
+            background-color: #ecfdf5;
+            color: #065f46;
+        }
+        .nonveg-badge {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation remains the same as original -->
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Nutrition summary and chart remain the same -->
+
+        <!-- Enhanced Meal Plan Section -->
+        <div class="mt-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">Today's Meal Plan</h2>
+                <div class="flex space-x-2">
+                    <div class="relative">
+                        <input type="text" id="mealSearch" placeholder="Search meals..." 
+                               class="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                        <button id="clearSearch" class="absolute right-2 top-2 text-gray-400 hidden">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <button class="btn-primary">
+                        <i class="fas fa-sync-alt mr-2"></i> Regenerate
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filter Buttons -->
+            <div class="flex mb-6 space-x-2">
+                <button class="meal-filter active px-4 py-2 rounded-lg bg-green-500 text-white" data-filter="all">
+                    All Meals
+                </button>
+                <button class="meal-filter px-4 py-2 rounded-lg bg-gray-200 text-gray-700" data-filter="veg">
+                    <i class="fas fa-leaf mr-2 text-green-500"></i> Vegetarian
+                </button>
+                <button class="meal-filter px-4 py-2 rounded-lg bg-gray-200 text-gray-700" data-filter="non-veg">
+                    <i class="fas fa-drumstick-bite mr-2 text-red-500"></i> Non-Vegetarian
+                </button>
+            </div>
+
+            <!-- Breakfast Section -->
+            <div class="meal-section-header">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-egg mr-2 text-yellow-500"></i> Breakfast Options
+                </h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Veg Breakfast 1 -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="veg" data-meal-name="Greek Yogurt Parfait">
+                    <div class="bg-green-100 p-4">
+                        <h3 class="font-bold text-green-800 flex items-center">
+                            <i class="fas fa-egg mr-2"></i> Breakfast
+                            <span class="ml-auto veg-badge">
+                                <i class="fas fa-leaf mr-1"></i> Veg
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg" 
+                                 alt="Greek Yogurt" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Greek Yogurt Parfait</h4>
+                                <p class="text-sm text-gray-500">450 kcal | 35g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 cup Greek yogurt
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/2 cup mixed berries
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 tbsp honey
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/4 cup granola
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Veg Breakfast 2 -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="veg" data-meal-name="Avocado Toast">
+                    <div class="bg-green-100 p-4">
+                        <h3 class="font-bold text-green-800 flex items-center">
+                            <i class="fas fa-egg mr-2"></i> Breakfast
+                            <span class="ml-auto veg-badge">
+                                <i class="fas fa-leaf mr-1"></i> Veg
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg" 
+                                 alt="Avocado Toast" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Avocado Toast</h4>
+                                <p class="text-sm text-gray-500">350 kcal | 12g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                2 slices whole grain bread
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/2 avocado
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                Chili flakes to taste
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Non-Veg Breakfast -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="non-veg" data-meal-name="Egg White Omelette">
+                    <div class="bg-green-100 p-4">
+                        <h3 class="font-bold text-green-800 flex items-center">
+                            <i class="fas fa-egg mr-2"></i> Breakfast
+                            <span class="ml-auto nonveg-badge">
+                                <i class="fas fa-drumstick-bite mr-1"></i> Non-Veg
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/6294357/pexels-photo-6294357.jpeg" 
+                                 alt="Egg White Omelette" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Egg White Omelette</h4>
+                                <p class="text-sm text-gray-500">300 kcal | 25g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                3 egg whites
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/4 cup diced chicken
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/4 cup spinach
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lunch Section -->
+            <div class="meal-section-header">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-utensils mr-2 text-blue-500"></i> Lunch Options
+                </h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Veg Lunch 1 -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="veg" data-meal-name="Quinoa Bowl">
+                    <div class="bg-blue-100 p-4">
+                        <h3 class="font-bold text-blue-800 flex items-center">
+                            <i class="fas fa-utensils mr-2"></i> Lunch
+                            <span class="ml-auto veg-badge">
+                                <i class="fas fa-leaf mr-1"></i> Veg
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/842571/pexels-photo-842571.jpeg" 
+                                 alt="Quinoa Bowl" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Quinoa Bowl</h4>
+                                <p class="text-sm text-gray-500">500 kcal | 18g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 cup cooked quinoa
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/2 cup roasted vegetables
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                2 tbsp hummus
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Non-Veg Lunch 1 -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="non-veg" data-meal-name="Grilled Chicken Salad">
+                    <div class="bg-blue-100 p-4">
+                        <h3 class="font-bold text-blue-800 flex items-center">
+                            <i class="fas fa-utensils mr-2"></i> Lunch
+                            <span class="ml-auto nonveg-badge">
+                                <i class="fas fa-drumstick-bite mr-1"></i> Non-Veg
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg" 
+                                 alt="Chicken Salad" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Grilled Chicken Salad</h4>
+                                <p class="text-sm text-gray-500">600 kcal | 45g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                6 oz grilled chicken
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                2 cups mixed greens
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/4 avocado
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Non-Veg Lunch 2 -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="non-veg" data-meal-name="Turkey Wrap">
+                    <div class="bg-blue-100 p-4">
+                        <h3 class="font-bold text-blue-800 flex items-center">
+                            <i class="fas fa-utensils mr-2"></i> Lunch
+                            <span class="ml-auto nonveg-badge">
+                                <i class="fas fa-drumstick-bite mr-1"></i> Non-Veg
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg" 
+                                 alt="Turkey Wrap" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Turkey Wrap</h4>
+                                <p class="text-sm text-gray-500">550 kcal | 35g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                3 oz turkey breast
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 whole wheat tortilla
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 tbsp Greek yogurt dressing
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dinner Section -->
+            <div class="meal-section-header">
+                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-moon mr-2 text-purple-500"></i> Dinner Options
+                </h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Veg Dinner 1 -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="veg" data-meal-name="Vegetable Stir Fry">
+                    <div class="bg-purple-100 p-4">
+                        <h3 class="font-bold text-purple-800 flex items-center">
+                            <i class="fas fa-moon mr-2"></i> Dinner
+                            <span class="ml-auto veg-badge">
+                                <i class="fas fa-leaf mr-1"></i> Veg
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/2664216/pexels-photo-2664216.jpeg" 
+                                 alt="Vegetable Stir Fry" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Vegetable Stir Fry</h4>
+                                <p class="text-sm text-gray-500">400 kcal | 15g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                2 cups mixed vegetables
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 tbsp olive oil
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/2 cup tofu
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Non-Veg Dinner 1 -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="non-veg" data-meal-name="Baked Salmon">
+                    <div class="bg-purple-100 p-4">
+                        <h3 class="font-bold text-purple-800 flex items-center">
+                            <i class="fas fa-moon mr-2"></i> Dinner
+                            <span class="ml-auto nonveg-badge">
+                                <i class="fas fa-drumstick-bite mr-1"></i> Non-Veg
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg" 
+                                 alt="Baked Salmon" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Baked Salmon</h4>
+                                <p class="text-sm text-gray-500">700 kcal | 50g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                6 oz salmon fillet
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 cup roasted vegetables
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 tsp lemon butter sauce
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Non-Veg Dinner 2 -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="non-veg" data-meal-name="Grilled Steak">
+                    <div class="bg-purple-100 p-4">
+                        <h3 class="font-bold text-purple-800 flex items-center">
+                            <i class="fas fa-moon mr-2"></i> Dinner
+                            <span class="ml-auto nonveg-badge">
+                                <i class="fas fa-drumstick-bite mr-1"></i> Non-Veg
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/1251208/pexels-photo-1251208.jpeg" 
+                                 alt="Grilled Steak" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Grilled Steak</h4>
+                                <p class="text-sm text-gray-500">800 kcal | 60g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                8 oz sirloin steak
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 cup mashed cauliflower
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 cup grilled asparagus
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Logging remains the same -->
+    </div>
+
+    <script>
+        // Enhanced Search Functionality
+        const mealSearch = document.getElementById('mealSearch');
+        const clearSearch = document.getElementById('clearSearch');
+        
+        mealSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            clearSearch.classList.toggle('hidden', !searchTerm);
+            
+            document.querySelectorAll('.meal-card').forEach(card => {
+                const mealName = card.dataset.mealName.toLowerCase();
+                const matches = mealName.includes(searchTerm);
+                card.style.display = matches ? 'block' : 'none';
+                
+                // Highlight matching text
+                if (searchTerm && matches) {
+                    const nameElement = card.querySelector('h4');
+                    const text = nameElement.textContent;
+                    const regex = new RegExp(searchTerm, 'gi');
+                    nameElement.innerHTML = text.replace(regex, 
+                        match => `<span class="search-highlight">${match}</span>`);
+                }
+            });
+        });
+
+        clearSearch.addEventListener('click', function() {
+            mealSearch.value = '';
+            this.classList.add('hidden');
+            document.querySelectorAll('.meal-card').forEach(card => {
+                card.style.display = 'block';
+                const nameElement = card.querySelector('h4');
+                nameElement.innerHTML = nameElement.textContent;
+            });
+        });
+
+        // Enhanced Filtering
+        class MealFilter {
+            constructor() {
+                this.filters = document.querySelectorAll('.meal-filter');
+                this.mealCards = document.querySelectorAll('.meal-card');
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.filterMeals('all');
+            }
+
+            setupEventListeners() {
+                this.filters.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const filter = button.dataset.filter;
+                        this.filterMeals(filter);
+                    });
+                });
+            }
+
+            filterMeals(filter) {
+                // Update button states
+                this.updateButtonStates(filter);
+                
+                // Filter meals with animation
+                this.mealCards.forEach(card => {
+                    const shouldShow = filter === 'all' || 
+                                     card.dataset.mealType === filter;
+                    card.style.display = shouldShow ? 'block' : 'none';
+                });
+            }
+
+            updateButtonStates(activeFilter) {
+                this.filters.forEach(button => {
+                    if (button.dataset.filter === activeFilter) {
+                        button.classList.add('active', 'bg-green-500', 'text-white');
+                        button.classList.remove('bg-gray-200', 'text-gray-700');
+                    } else {
+                        button.classList.remove('active', 'bg-green-500', 'text-white');
+                        button.classList.add('bg-gray-200', 'text-gray-700');
+                    }
+                });
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new MealFilter();
+            // Rest of existing JS...
+        });
+    </script>
+</body>
+</html>

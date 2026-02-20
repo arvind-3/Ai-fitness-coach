@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout | AI Fitness Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css-21.css">
+    <style>
+        .exercise-card {
+            transition: all 0.3s ease;
+        }
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .form-feedback {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .form-feedback.show {
+            opacity: 1;
+        }
+        .timer-circle {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation with mobile menu -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <div>
+                        <a href="#" class="flex items-center py-4 px-2">
+                            <img src="https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                                 alt="Logo" class="h-8 w-8 mr-2 rounded-full">
+                            <span class="font-semibold text-gray-500 text-lg">AI Fitness Coach</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-green-500">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+                <!-- Desktop menu -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="index.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Home</a>
+                    <a href="dashboard.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Dashboard</a>
+                    <a href="workout.html" class="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold">Workout</a>
+                    <a href="diet.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Diet</a>
+                    <a href="telemedicine.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Telemedicine</a>
+                    <a href="settings.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Settings</a>
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="mobile-menu hidden md:hidden px-2 pt-2 pb-3">
+                <a href="index.html" class="block py-2 px-3 text-green-500 rounded hover:bg-gray-100">Home</a>
+                <a href="dashboard.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Dashboard</a>
+                <a href="workout.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Workout</a>
+                <a href="diet.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Diet</a>
+                <a href="telemedicine.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Telemedicine</a>
+                <a href="settings.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- AI Form Correction Section -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Webcam Feed -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Form Analysis</h2>
+                <div class="relative aspect-video bg-gray-200 rounded-lg overflow-hidden">
+                    <video id="webcam" autoplay playsinline class="w-full h-full object-cover"></video>
+                    <canvas id="poseCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+                    <div class="absolute bottom-4 left-0 right-0 flex justify-center">
+                        <button id="toggleWebcam" class="btn-primary">
+                            <i class="fas fa-video mr-2"></i> Enable Camera
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Feedback -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">AI Feedback</h2>
+                <div id="feedbackContainer" class="space-y-4">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 text-blue-500">
+                                <i class="fas fa-info-circle text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-medium text-blue-800">Welcome to AI Form Coach</h3>
+                                <p class="mt-1 text-blue-700">Enable your camera to get real-time feedback on your exercise form.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wearable Integration -->
+                <div class="mt-6 border-t pt-6">
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">Wearable Device Data</h3>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-green-100 rounded-full text-green-600">
+                                <i class="fas fa-heartbeat text-xl"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-500">Heart Rate</p>
+                                <p id="heartRate" class="text-xl font-bold">-- bpm</p>
+                            </div>
+                        </div>
+                        <button id="connectWearable" class="btn-secondary">
+                            <i class="fas fa-bluetooth-b mr-2"></i> Connect Device
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout Generator -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Create New Workout</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Workout Type</label>
+                        <select class="w-full p-2 border border-gray-300 rounded-md">
+                            <option>Strength Training</option>
+                            <option>Cardio</option>
+                            <option>HIIT</option>
+                            <option>Yoga</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Duration (min)</label>
+                        <input type="number" value="30" class="w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Difficulty</label>
+                        <select class="w-full p-2 border border-gray-300 rounded-md">
+                            <option>Beginner</option>
+                            <option>Intermediate</option>
+                            <option>Advanced</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Focus Area</label>
+                        <select class="w-full p-2 border border-gray-300 rounded-md">
+                            <option>Full Body</option>
+                            <option>Upper Body</option>
+                            <option>Lower Body</option>
+                            <option>Core</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-between">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Equipment</label>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Bodyweight</span>
+                            <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Dumbbells</span>
+                            <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Resistance Bands</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary w-full mt-4">
+                        <i class="fas fa-magic mr-2"></i> Generate Workout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise Library -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Exercise Library</h2>
+            <div class="flex space-x-2">
+                <button class="btn-secondary">
+                    <i class="fas fa-filter mr-2"></i> Filter
+                </button>
+                <button class="btn-secondary">
+                    <i class="fas fa-search mr-2"></i> Search
+                </button>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Exercise Card 1 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden exercise-card">
+                <img src="https://images.pexels.com/photos/841131/pexels-photo-841131.jpeg" 
+                     alt="Squats" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg">Bodyweight Squats</h3>
+                    <div class="flex items-center mt-2 text-sm text-gray-500">
+                        <span class="mr-3"><i class="fas fa-dumbbell mr-1"></i> Legs</span>
+                        <span><i class="fas fa-level-up-alt mr-1"></i> Beginner</span>
+                    </div>
+                    <button class="btn-primary w-full mt-4">
+                        <i class="fas fa-plus mr-2"></i> Add to Workout
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Exercise Card 2 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden exercise-card">
+                <img src="https://images.pexels.com/photos/3757376/pexels-photo-3757376.jpeg" 
+                     alt="Pushups" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg">Push-ups</h3>
+                    <div class="flex items-center mt-2 text-sm text-gray-500">
+                        <span class="mr-3"><i class="fas fa-dumbbell mr-1"></i> Chest</span>
+                        <span><i class="fas fa-level-up-alt mr-1"></i> Intermediate</span>
+                    </div>
+                    <button class="btn-primary w-full mt-4">
+                        <i class="fas fa-plus mr-2"></i> Add to Workout
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Exercise Card 3 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden exercise-card">
+                <img src="https://images.pexels.com/photos/903171/pexels-photo-903171.jpeg" 
+                     alt="Lunges" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="font-bold text-lg">Walking Lunges</h3>
+                    <div class="flex items-center mt-2 text-sm text-gray-500">
+                        <span class="mr-3"><i class="fas fa-dumbbell mr-1"></i> Legs</span>
+                        <span><i class="fas fa-level-up-alt mr-1"></i> Intermediate</span>
+                    </div>
+                    <button class="btn-primary w-full mt-4">
+                        <i class="fas fa-plus mr-2"></i> Add to Workout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rest Timer -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Rest Timer</h2>
+            <div class="flex flex-col items-center">
+                <div class="relative w-40 h-40 mb-6">
+                    <svg class="w-full h-full" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+                        <circle id="timerCircle" cx="50" cy="50" r="45" fill="none" stroke="#10B981" 
+                                stroke-width="8" stroke-linecap="round" transform="rotate(-90 50 50)"
+                                class="timer-circle"/>
+                        <text id="timerDisplay" x="50" y="55" text-anchor="middle" font-size="24" 
+                              font-weight="bold" fill="#1F2937">1:00</text>
+                    </svg>
+                </div>
+                <div class="flex space-x-4">
+                    <button id="startTimer" class="btn-primary">
+                        <i class="fas fa-play mr-2"></i> Start
+                    </button>
+                    <button id="resetTimer" class="btn-secondary">
+                        <i class="fas fa-redo mr-2"></i> Reset
+                    </button>
+                </div>
+                <div class="mt-4 w-full max-w-xs">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Set Time (seconds)</label>
+                    <input type="range" id="timerRange" min="30" max="180" value="60" 
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>30s</span>
+                        <span>180s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout History -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Workout History</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Workout</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Calories</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Today</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Full Body Strength</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">45 min</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">320 kcal</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Yesterday</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Upper Body</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">35 min</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">280 kcal</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2 days ago</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cardio</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">30 min</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">350 kcal</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workout Progress -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Your Progress</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="text-sm font-medium text-gray-500">Today's Workout</p>
+                    <p class="text-2xl font-bold">3/5 Exercises</p>
+                    <div class="mt-2 w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 60%"></div>
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="text-sm font-medium text-gray-500">Calories Burned</p>
+                    <p class="text-2xl font-bold">320 kcal</p>
+                    <div class="mt-2 text-sm text-green-600">
+                        <i class="fas fa-arrow-up mr-1"></i> 12% from yesterday
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <p class="text-sm font-medium text-gray-500">Form Accuracy</p>
+                    <p class="text-2xl font-bold">87%</p>
+                    <div class="mt-2 text-sm text-blue-600">
+                        <i class="fas fa-chart-line mr-1"></i> Improving
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <button id="backToTop" class="fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-green-600">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Back to top functionality
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Webcam and AI Form Analysis
+        const toggleWebcam = document.getElementById('toggleWebcam');
+        const webcam = document.getElementById('webcam');
+        const poseCanvas = document.getElementById('poseCanvas');
+        let isWebcamOn = false;
+
+        toggleWebcam.addEventListener('click', async () => {
+            if (!isWebcamOn) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    webcam.srcObject = stream;
+                    toggleWebcam.innerHTML = '<i class="fas fa-video-slash mr-2"></i> Disable Camera';
+                    isWebcamOn = true;
+                    
+                    // Mock AI analysis (would be replaced with real pose detection)
+                    setInterval(() => {
+                        const feedbackContainer = document.getElementById('feedbackContainer');
+                        const randomFeedback = [
+                            'Great form! Keep it up!',
+                            'Try to keep your back straight',
+                            'Bend your knees slightly more',
+                            'Perfect alignment!',
+                            'Slow down your movement for better control'
+                        ];
+                        
+                        feedbackContainer.innerHTML = `
+                            <div class="p-4 bg-green-50 rounded-lg">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 text-green-500">
+                                        <i class="fas fa-check-circle text-xl"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-lg font-medium text-green-800">Form Feedback</h3>
+                                        <p class="mt-1 text-green-700">${randomFeedback[Math.floor(Math.random() * randomFeedback.length)]}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }, 3000);
+                } catch (err) {
+                    console.error("Error accessing webcam:", err);
+                }
+            } else {
+                webcam.srcObject.getTracks().forEach(track => track.stop());
+                toggleWebcam.innerHTML = '<i class="fas fa-video mr-2"></i> Enable Camera';
+                isWebcamOn = false;
+            }
+        });
+
+        // Wearable device simulation
+        const connectWearable = document.getElementById('connectWearable');
+        const heartRate = document.getElementById('heartRate');
+        
+        connectWearable.addEventListener('click', () => {
+            connectWearable.innerHTML = '<i class="fas fa-sync-alt fa-spin mr-2"></i> Connecting...';
+            
+            // Simulate device connection
+            setTimeout(() => {
+                connectWearable.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Connected';
+                connectWearable.classList.remove('btn-secondary');
+                connectWearable.classList.add('bg-green-100', 'text-green-800', 'hover:bg-green-200');
+                
+                // Simulate heart rate updates
+                setInterval(() => {
+                    heartRate.textContent = `${Math.floor(Math.random() * 40) + 70} bpm`;
+                }, 2000);
+            }, 1500);
+        });
+
+        // Rest Timer Functionality
+        const timerCircle = document.getElementById('timerCircle');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const startTimer = document.getElementById('startTimer');
+        const resetTimer = document.getElementById('resetTimer');
+        const timerRange = document.getElementById('timerRange');
+        let timerInterval;
+        let timeLeft = 60;
+        let totalTime = 60;
+
+        timerRange.addEventListener('input', function() {
+            timeLeft = parseInt(this.value);
+            totalTime = timeLeft;
+            updateTimerDisplay();
+        });
+
+        startTimer.addEventListener('click', function() {
+            if (this.innerHTML.includes('Start')) {
+                this.innerHTML = '<i class="fas fa-pause mr-2"></i> Pause';
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        startTimer.innerHTML = '<i class="fas fa-play mr-2"></i> Start';
+                        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3').play();
+                    }
+                }, 1000);
+            } else {
+                this.innerHTML = '<i class="fas fa-play mr-2"></i> Start';
+                clearInterval(timerInterval);
+            }
+        });
+
+        resetTimer.addEventListener('click', function() {
+            clearInterval(timerInterval);
+            timeLeft = totalTime;
+            updateTimerDisplay();
+            startTimer.innerHTML = '<i class="fas fa-play mr-2"></i> Start';
+        });
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            const circumference = 283;
+            const offset = circumference - (timeLeft / totalTime) * circumference;
+            timerCircle.style.strokeDashoffset = offset;
+        }
+
+        // Initialize timer display
+        updateTimerDisplay();
+    </script>
+</body>
+</html>

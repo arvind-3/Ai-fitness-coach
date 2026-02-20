@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fitness Coach - Workout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@0.0.6/dist/pose-detection.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .feedback-correct { color: #10B981; }
+        .feedback-warning { color: #F59E0B; }
+        .feedback-error { color: #EF4444; }
+        #video-container { position: relative; }
+        #overlay { position: absolute; top: 0; left: 0; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-indigo-600 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">AI Fitness Coach</h1>
+            <div class="space-x-4">
+                <a href="index.html" class="hover:text-indigo-200"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="workout.html" class="font-bold"><i class="fas fa-dumbbell"></i> Workout</a>
+                <a href="diet.html" class="hover:text-indigo-200"><i class="fas fa-utensils"></i> Diet</a>
+                <a href="telemedicine.html" class="hover:text-indigo-200"><i class="fas fa-user-md"></i> Telemedicine</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Exercise Selection Panel -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4 text-indigo-700">Exercise Selection</h2>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Choose Exercise</label>
+                    <select id="exercise-select" class="w-full p-2 border border-gray-300 rounded">
+                        <option value="squat">Squat</option>
+                        <option value="pushup">Push-up</option>
+                        <option value="lunge">Lunge</option>
+                        <option value="plank">Plank</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Target Reps</label>
+                    <input type="number" id="target-reps" class="w-full p-2 border border-gray-300 rounded" value="10" min="1">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Difficulty Level</label>
+                    <select id="difficulty" class="w-full p-2 border border-gray-300 rounded">
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+
+                <button id="start-workout" class="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition">
+                    <i class="fas fa-play mr-2"></i> Start Workout
+                </button>
+
+                <div class="mt-6">
+                    <h3 class="font-semibold text-gray-700 mb-2">Exercise Instructions</h3>
+                    <div id="exercise-instructions" class="text-gray-600">
+                        Select an exercise to view instructions.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Feed and AI Feedback -->
+            <div class="lg:col-span-2">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4 text-indigo-700">Workout Session</h2>
+                    
+                    <div id="video-container" class="mb-4">
+                        <video id="webcam" autoplay playsinline class="w-full h-auto rounded-lg border-2 border-gray-300"></video>
+                        <canvas id="overlay" class="w-full h-auto"></canvas>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gray-50 p-3 rounded text-center">
+                            <div class="text-sm text-gray-500">Reps</div>
+                            <div id="rep-counter" class="text-2xl font-bold">0</div>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded text-center">
+                            <div class="text-sm text-gray-500">Time</div>
+                            <div id="timer" class="text-2xl font-bold">00:00</div>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded text-center">
+                            <div class="text-sm text-gray-500">Calories</div>
+                            <div id="calories" class="text-2xl font-bold">0</div>
+                        </div>
+                    </div>
+
+                    <div id="feedback-container" class="p-4 bg-gray-50 rounded-lg">
+                        <h3 class="font-semibold mb-2">AI Feedback</h3>
+                        <div id="form-feedback" class="space-y-2">
+                            <p>Start your workout to receive real-time feedback on your form.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM Elements
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('overlay');
+        const ctx = canvas.getContext('2d');
+        const startButton = document.getElementById('start-workout');
+        const exerciseSelect = document.getElementById('exercise-select');
+        const repCounter = document.getElementById('rep-counter');
+        const timerDisplay = document.getElementById('timer');
+        const caloriesDisplay = document.getElementById('calories');
+        const feedbackContainer = document.getElementById('form-feedback');
+        const exerciseInstructions = document.getElementById('exercise-instructions');
+
+        // State variables
+        let detector;
+        let isWorkoutActive = false;
+        let repCount = 0;
+        let startTime;
+        let timerInterval;
+        let currentExercise = 'squat';
+        let modelLoaded = false;
+
+        // Exercise instructions
+        const instructions = {
+            squat: "Stand with feet shoulder-width apart. Lower your body as if sitting back into a chair, keeping knees behind toes. Return to standing position.",
+            pushup: "Place hands slightly wider than shoulders. Lower body until chest nearly touches floor, keeping back straight. Push back up.",
+            lunge: "Step forward with one leg, lowering hips until both knees are bent at 90 degrees. Keep front knee above ankle. Return to start.",
+            plank: "Balance on forearms and toes, keeping body in a straight line from head to heels. Engage core and hold position."
+        };
+
+        // Form feedback thresholds
+        const feedbackThresholds = {
+            squat: {
+                kneeAngle: { min: 80, max: 100 },
+                hipAngle: { min: 70, max: 90 }
+            },
+            pushup: {
+                elbowAngle: { min: 80, max: 100 },
+                shoulderAngle: { min: 70, max: 90 }
+            },
+            lunge: {
+                frontKneeAngle: { min: 80, max: 100 },
+                backKneeAngle: { min: 80, max: 100 }
+            },
+            plank: {
+                hipAngle: { min: 170, max: 190 }
+            }
+        };
+
+        // Initialize the app
+        async function init() {
+            try {
+                // Load the MoveNet model
+                detector = await poseDetection.createDetector(
+                    poseDetection.SupportedModels.MoveNet,
+                    { modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER }
+                );
+                modelLoaded = true;
+                console.log('Model loaded successfully');
+            } catch (error) {
+                console.error('Error loading model:', error);
+                feedbackContainer.innerHTML = '<p class="feedback-error">Error loading AI model. Form correction unavailable.</p>';
+            }
+
+            // Set up event listeners
+            exerciseSelect.addEventListener('change', updateExercise);
+            startButton.addEventListener('click', toggleWorkout);
+            
+            // Set initial exercise instructions
+            updateExercise();
+        }
+
+        // Update exercise details when selection changes
+        function updateExercise() {
+            currentExercise = exerciseSelect.value;
+            exerciseInstructions.textContent = instructions[currentExercise];
+            repCount = 0;
+            repCounter.textContent = '0';
+        }
+
+        // Toggle workout session
+        async function toggleWorkout() {
+            if (!isWorkoutActive) {
+                // Start workout
+                if (!modelLoaded) {
+                    alert('AI model is still loading. Please wait...');
+                    return;
+                }
+
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    video.srcObject = stream;
+                    
+                    // Set canvas dimensions to match video
+                    video.onloadedmetadata = () => {
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                    };
+
+                    isWorkoutActive = true;
+                    startButton.innerHTML = '<i class="fas fa-stop mr-2"></i> Stop Workout';
+                    startButton.classList.remove('bg-indigo-600');
+                    startButton.classList.add('bg-red-600');
+                    
+                    // Start timer
+                    startTime = Date.now();
+                    timerInterval = setInterval(updateTimer, 1000);
+                    
+                    // Start pose detection loop
+                    detectPose();
+                } catch (error) {
+                    console.error('Error accessing webcam:', error);
+                    feedbackContainer.innerHTML = '<p class="feedback-error">Could not access webcam. Please enable camera permissions.</p>';
+                }
+            } else {
+                // Stop workout
+                const stream = video.srcObject;
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                
+                isWorkoutActive = false;
+                startButton.innerHTML = '<i class="fas fa-play mr-2"></i> Start Workout';
+                startButton.classList.remove('bg-red-600');
+                startButton.classList.add('bg-indigo-600');
+                
+                clearInterval(timerInterval);
+            }
+        }
+
+        // Update timer display
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+            timerDisplay.textContent = ${minutes}:${seconds};
+            
+            // Estimate calories (very rough estimate)
+            const calories = Math.floor(elapsed * 5 / 60); // ~5 cal/min for moderate exercise
+            caloriesDisplay.textContent = calories;
+        }
+
+        // Detect pose and provide feedback
+        async function detectPose() {
+            if (!isWorkoutActive) return;
+
+            try {
+                const poses = await detector.estimatePoses(video);
+                drawKeypoints(poses);
+                analyzeForm(poses);
+            } catch (error) {
+                console.error('Error detecting pose:', error);
+            }
+
+            requestAnimationFrame(detectPose);
+        }
+
+        // Draw keypoints on canvas
+        function drawKeypoints(poses) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (poses.length > 0) {
+                const keypoints = poses[0].keypoints;
+                
+                // Draw keypoints
+                keypoints.forEach(keypoint => {
+                    if (keypoint.score > 0.3) {
+                        ctx.beginPath();
+                        ctx.arc(keypoint.x, keypoint.y, 5, 0, 2 * Math.PI);
+                        ctx.fillStyle = 'red';
+                        ctx.fill();
+                    }
+                });
+                
+                // Draw skeleton (simplified)
+                const connections = [
+                    // Torso
+                    [5, 6], [6, 12], [12, 11], [11, 5],
+                    // Left arm
+                    [5, 7], [7, 9],
+                    // Right arm
+                    [6, 8], [8, 10],
+                    // Left leg
+                    [11, 13], [13, 15],
+                    // Right leg
+                    [12, 14], [14, 16]
+                ];
+                
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                
+                connections.forEach(([i, j]) => {
+                    const kp1 = keypoints[i];
+                    const kp2 = keypoints[j];
+                    
+                    if (kp1.score > 0.3 && kp2.score > 0.3) {
+                        ctx.beginPath();
+                        ctx.moveTo(kp1.x, kp1.y);
+                        ctx.lineTo(kp2.x, kp2.y);
+                        ctx.stroke();
+                    }
+                });
+            }
+        }
+
+        // Analyze form and provide feedback
+        function analyzeForm(poses) {
+            if (poses.length === 0) {
+                feedbackContainer.innerHTML = '<p>No person detected. Please position yourself in frame.</p>';
+                return;
+            }
+
+            const keypoints = poses[0].keypoints;
+            const feedback = [];
+            
+            // Calculate angles between keypoints
+            if (currentExercise === 'squat') {
+                // For squats, we'll check knee and hip angles
+                const leftHip = keypoints[11];
+                const leftKnee = keypoints[13];
+                const leftAnkle = keypoints[15];
+                const rightHip = keypoints[12];
+                const rightKnee = keypoints[14];
+                const rightAnkle = keypoints[16];
+                
+                if (leftHip.score > 0.3 && leftKnee.score > 0.3 && leftAnkle.score > 0.3) {
+                    const kneeAngle = calculateAngle(leftHip, leftKnee, leftAnkle);
+                    const hipAngle = calculateAngle(leftKnee, leftHip, rightHip);
+                    
+                    // Check knee angle
+                    if (kneeAngle < feedbackThresholds.squat.kneeAngle.min) {
+                        feedback.push('<p class="feedback-error"><i class="fas fa-exclamation-circle mr-1"></i> Knees too far forward - keep them behind toes</p>');
+                    } else if (kneeAngle > feedbackThresholds.squat.kneeAngle.max) {
+                        feedback.push('<p class="feedback-warning"><i class="fas fa-info-circle mr-1"></i> Bend knees more for proper squat depth</p>');
+                    } else {
+                        feedback.push('<p class="feedback-correct"><i class="fas fa-check-circle mr-1"></i> Knee position good</p>');
+                    }
+                    
+                    // Check hip angle
+                    if (hipAngle < feedbackThresholds.squat.hipAngle.min) {
+                        feedback.push('<p class="feedback-warning"><i class="fas fa-info-circle mr-1"></i> Lean forward slightly more at hips</p>');
+                    } else if (hipAngle > feedbackThresholds.squat.hipAngle.max) {
+                        feedback.push('<p class="feedback-error"><i class="fas fa-exclamation-circle mr-1"></i> Back too upright - hinge at hips</p>');
+                    } else {
+                        feedback.push('<p class="feedback-correct"><i class="fas fa-check-circle mr-1"></i> Hip position good</p>');
+                    }
+                    
+                    // Detect squat motion for rep counting
+                    if (kneeAngle < 100 && hipAngle < 100) {
+                        // In squat position
+                        if (!window.inSquatPosition) {
+                            window.inSquatPosition = true;
+                        }
+                    } else {
+                        // Standing up
+                        if (window.inSquatPosition) {
+                            window.inSquatPosition = false;
+                            repCount++;
+                            repCounter.textContent = repCount;
+                        }
+                    }
+                }
+            }
+            // Similar logic for other exercises would go here...
+            
+            feedbackContainer.innerHTML = feedback.join('') || '<p>Analyzing your form...</p>';
+        }
+
+        // Calculate angle between three points
+        function calculateAngle(a, b, c) {
+            const ab = { x: b.x - a.x, y: b.y - a.y };
+            const cb = { x: b.x - c.x, y: b.y - c.y };
+            
+            const dot = (ab.x * cb.x + ab.y * cb.y);
+            const cross = (ab.x * cb.y - ab.y * cb.x);
+            
+            const angle = Math.atan2(cross, dot) * (180 / Math.PI);
+            return Math.abs(angle);
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

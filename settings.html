@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#F9FAFB" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1F2937" media="(prefers-color-scheme: dark)">
+    <title>Settings | AI Fitness Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/shared.css">
+    <style>
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #10B981;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #10B981;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .theme-option {
+            transition: all 0.3s ease;
+        }
+        .theme-option:hover {
+            transform: scale(1.05);
+        }
+        .theme-option.selected {
+            border: 2px solid #10B981;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation with mobile menu -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <div>
+                        <a href="#" class="flex items-center py-4 px-2">
+                            <img src="https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                                 alt="Logo" class="h-8 w-8 mr-2 rounded-full">
+                            <span class="font-semibold text-gray-500 text-lg">AI Fitness Coach</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-green-500">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+                <!-- Desktop menu -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="index.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Home</a>
+                    <a href="dashboard.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Dashboard</a>
+                    <a href="workout.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Workout</a>
+                    <a href="diet.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Diet</a>
+                    <a href="telemedicine.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Telemedicine</a>
+                    <a href="settings.html" class="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold">Settings</a>
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="mobile-menu hidden md:hidden px-2 pt-2 pb-3">
+                <a href="index.html" class="block py-2 px-3 text-green-500 rounded hover:bg-gray-100">Home</a>
+                <a href="dashboard.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Dashboard</a>
+                <a href="workout.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Workout</a>
+                <a href="diet.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Diet</a>
+                <a href="telemedicine.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Telemedicine</a>
+                <a href="settings.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Settings Tabs -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex overflow-x-auto border-b border-gray-200">
+            <button class="tab-button px-4 py-2 font-medium text-sm border-b-2 border-green-500 text-green-600" data-tab="profile">Profile</button>
+            <button class="tab-button px-4 py-2 font-medium text-sm text-gray-500 hover:text-gray-700" data-tab="preferences">Preferences</button>
+            <button class="tab-button px-4 py-2 font-medium text-sm text-gray-500 hover:text-gray-700" data-tab="privacy">Privacy</button>
+            <button class="tab-button px-4 py-2 font-medium text-sm text-gray-500 hover:text-gray-700" data-tab="devices">Devices</button>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profile" class="tab-content active bg-white rounded-lg shadow-md p-6 mt-4">
+            <h2 class="text-xl font-semibold mb-4 pb-2 border-b border-gray-200">Profile</h2>
+            <div class="flex items-center mb-6">
+                <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                     alt="User" class="h-16 w-16 rounded-full mr-4">
+                <div>
+                    <button class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-1 px-3 rounded-md text-sm">
+                        Change Photo
+                    </button>
+                    <p class="text-xs text-gray-500 mt-1">JPG, GIF or PNG. Max size of 2MB</p>
+                </div>
+            </div>
+            
+            <form>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="firstName">
+                            First Name
+                        </label>
+                        <input type="text" id="firstName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="John">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="lastName">
+                            Last Name
+                        </label>
+                        <input type="text" id="lastName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="Doe">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                        Email
+                    </label>
+                    <input type="email" id="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="john.doe@example.com">
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Update Profile
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Preferences Tab -->
+        <div id="preferences" class="tab-content bg-white rounded-lg shadow-md p-6 mt-4">
+            <h2 class="text-xl font-semibold mb-4">Theme Preferences</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="theme-option p-2 rounded-lg cursor-pointer selected" data-theme="light">
+                    <div class="bg-white border border-gray-200 rounded-md p-4">
+                        <div class="h-4 bg-green-500 rounded mb-1"></div>
+                        <div class="h-4 bg-gray-100 rounded mb-1"></div>
+                        <div class="h-4 bg-gray-100 rounded"></div>
+                        <p class="text-center mt-2 text-sm">Light</p>
+                    </div>
+                </div>
+                <div class="theme-option p-2 rounded-lg cursor-pointer" data-theme="dark">
+                    <div class="bg-gray-800 border border-gray-700 rounded-md p-4">
+                        <div class="h-4 bg-green-500 rounded mb-1"></div>
+                        <div class="h-4 bg-gray-700 rounded mb-1"></div>
+                        <div class="h-4 bg-gray-700 rounded"></div>
+                        <p class="text-center mt-2 text-sm text-white">Dark</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-xl font-semibold mb-4">Notification Preferences</h2>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-medium">Workout Reminders</h3>
+                        <p class="text-sm text-gray-500">Daily notifications for scheduled workouts</p>
+                    </div>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="toggle-checkbox sr-only" checked>
+                        <span class="toggle-label relative w-12 h-6 bg-gray-300 rounded-full transition-all duration-300 ease-in-out"></span>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-medium">Meal Reminders</h3>
+                        <p class="text-sm text-gray-500">Reminders to log your meals</p>
+                    </div>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="toggle-checkbox sr-only" checked>
+                        <span class="toggle-label relative w-12 h-6 bg-gray-300 rounded-full transition-all duration-300 ease-in-out"></span>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-medium">Progress Reports</h3>
+                        <p class="text-sm text-gray-500">Weekly summary of your progress</p>
+                    </div>
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="toggle-checkbox sr-only">
+                        <span class="toggle-label relative w-12 h-6 bg-gray-300 rounded-full transition-all duration-300 ease-in-out"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Privacy Tab -->
+        <div id="privacy" class="tab-content bg-white rounded-lg shadow-md p-6 mt-4">
+            <h2 class="text-xl font-semibold mb-4">Data Privacy</h2>
+            <div class="space-y-4">
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <h3 class="font-medium">Data Collection</h3>
+                    <p class="text-sm text-gray-600 mt-1">We collect minimal data to improve your experience.</p>
+                    <button id="viewPolicyBtn" class="mt-2 text-sm text-blue-600 hover:underline">View Data Policy</button>
+                    <div id="policyModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-xl font-bold">Privacy Policy & Terms</h3>
+                                <button id="closePolicyBtn" class="text-gray-500 hover:text-gray-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="space-y-4 text-sm">
+                                <section>
+                                    <h4 class="font-bold mb-2">1. Data Collection</h4>
+                                    <p class="mb-2">We collect the following data to provide our services:</p>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Account information (name, email)</li>
+                                        <li>Fitness activity data</li>
+                                        <li>Diet and nutrition information</li>
+                                        <li>Device information for connectivity</li>
+                                    </ul>
+                                </section>
+                                
+                                <section>
+                                    <h4 class="font-bold mb-2">2. Data Usage</h4>
+                                    <p>Your data is used to:</p>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Provide personalized fitness recommendations</li>
+                                        <li>Track your progress over time</li>
+                                        <li>Improve our services</li>
+                                    </ul>
+                                </section>
+                                
+                                <section>
+                                    <h4 class="font-bold mb-2">3. Data Protection</h4>
+                                    <p>We implement security measures including:</p>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Encryption of sensitive data</li>
+                                        <li>Regular security audits</li>
+                                        <li>Access controls</li>
+                                    </ul>
+                                </section>
+                                
+                                <section>
+                                    <h4 class="font-bold mb-2">4. Your Rights</h4>
+                                    <p>You have the right to:</p>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Access your personal data</li>
+                                        <li>Request correction of inaccurate data</li>
+                                        <li>Request deletion of your data</li>
+                                        <li>Withdraw consent</li>
+                                    </ul>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <h3 class="font-medium">Export Your Data</h3>
+                    <p class="text-sm text-gray-600 mt-1">Download all your personal data in JSON format.</p>
+                    <button class="mt-2 btn-secondary">
+                        <i class="fas fa-download mr-2"></i> Export Data
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Devices Tab -->
+        <div id="devices" class="tab-content bg-white rounded-lg shadow-md p-6 mt-4">
+            <h2 class="text-xl font-semibold mb-4 pb-2 border-b border-gray-200">Device Connections</h2>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <img src="https://via.placeholder.com/40" alt="Fitbit" class="h-10 w-10 mr-3">
+                        <div>
+                            <h3 class="font-medium">Fitbit Charge 4</h3>
+                            <p class="text-sm text-gray-500">Last synced 2 hours ago</p>
+                        </div>
+                    </div>
+                    <button class="text-red-500 hover:text-red-700 text-sm font-medium">
+                        Disconnect
+                    </button>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <img src="https://via.placeholder.com/40" alt="Apple Watch" class="h-10 w-10 mr-3">
+                        <div>
+                            <h3 class="font-medium">Apple Watch</h3>
+                            <p class="text-sm text-gray-500">Not connected</p>
+                        </div>
+                    </div>
+                    <button class="text-green-500 hover:text-green-700 text-sm font-medium">
+                        Connect
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <button id="backToTop" class="fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-green-600">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="js/settings.js"></script>
+    <script>
+        // Mobile menu toggle (keep existing functionality)
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Back to top functionality
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Tab functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Update tab buttons
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('border-green-500', 'text-green-600');
+                    btn.classList.add('text-gray-500');
+                });
+                this.classList.add('border-green-500', 'text-green-600');
+                this.classList.remove('text-gray-500');
+
+                // Show selected tab content
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Theme selection
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.theme-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                // In a real app, this would change the theme
+            });
+        });
+
+        // Toggle switches
+        document.querySelectorAll('.toggle-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const label = this.nextElementSibling;
+                if (this.checked) {
+                    label.classList.add('bg-green-500');
+                    label.classList.remove('bg-gray-300');
+                } else {
+                    label.classList.add('bg-gray-300');
+                    label.classList.remove('bg-green-500');
+                }
+            });
+        });
+
+        // Initialize toggles
+        document.querySelectorAll('.toggle-checkbox').forEach(checkbox => {
+            const label = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                label.classList.add('bg-green-500');
+                label.classList.remove('bg-gray-300');
+            } else {
+                label.classList.add('bg-gray-300');
+                label.classList.remove('bg-green-500');
+            }
+        });
+
+        // Settings Storage
+        const settings = JSON.parse(localStorage.getItem('fitnessSettings')) || {
+            profile: {
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john.doe@example.com'
+            },
+            preferences: {
+                theme: 'light',
+                notifications: {
+                    workoutReminders: true,
+                    mealReminders: true,
+                    progressReports: false
+                }
+            },
+            privacy: {
+                dataSharing: false
+            }
+        };
+
+        // Initialize form values
+        function initializeSettings() {
+            // Profile
+            document.getElementById('firstName').value = settings.profile.firstName;
+            document.getElementById('lastName').value = settings.profile.lastName;
+            document.getElementById('email').value = settings.profile.email;
+
+            // Preferences
+            document.querySelector(`.theme-option[data-theme="${settings.preferences.theme}"]`).classList.add('selected');
+            document.querySelector('input[type="checkbox"][name="workoutReminders"]').checked = settings.preferences.notifications.workoutReminders;
+            document.querySelector('input[type="checkbox"][name="mealReminders"]').checked = settings.preferences.notifications.mealReminders;
+            document.querySelector('input[type="checkbox"][name="progressReports"]').checked = settings.preferences.notifications.progressReports;
+
+            // Privacy
+            document.querySelector('input[type="checkbox"][name="dataSharing"]').checked = settings.privacy.dataSharing;
+        }
+
+        // Save settings to localStorage
+        function saveSettings() {
+            // Profile
+            settings.profile = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value
+            };
+
+            // Preferences
+            settings.preferences = {
+                theme: document.querySelector('.theme-option.selected').dataset.theme,
+                notifications: {
+                    workoutReminders: document.querySelector('input[type="checkbox"][name="workoutReminders"]').checked,
+                    mealReminders: document.querySelector('input[type="checkbox"][name="mealReminders"]').checked,
+                    progressReports: document.querySelector('input[type="checkbox"][name="progressReports"]').checked
+                }
+            };
+
+            // Privacy
+            settings.privacy = {
+                dataSharing: document.querySelector('input[type="checkbox"][name="dataSharing"]').checked
+            };
+
+            localStorage.setItem('fitnessSettings', JSON.stringify(settings));
+            showToast('Settings saved successfully!');
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Form submission
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveSettings();
+            });
+        });
+
+        // Initialize settings on page load
+        document.addEventListener('DOMContentLoaded', initializeSettings);
+
+        // Apply theme
+        function applyTheme(theme) {
+            document.documentElement.classList.remove('dark');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        // Theme selection
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.theme-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                const theme = this.dataset.theme;
+                applyTheme(theme);
+            });
+        });
+    </script>
+</body>
+</html>
+
+

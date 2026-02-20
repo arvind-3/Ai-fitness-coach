@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress Tracking | AI Fitness Coach</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      padding-top: 80px;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <!-- Header -->
+  <header class="bg-white shadow-lg fixed w-full z-10 top-0">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <img src="https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg" alt="Logo" class="h-10 w-auto">
+        <h1 class="text-2xl font-bold ml-2 text-blue-600">AI Fitness Coach</h1>
+      </div>
+      <nav class="hidden md:flex space-x-6">
+        <a href="index.html" class="text-gray-600 hover:text-blue-600">Home</a>
+        <a href="workout.html" class="text-gray-600 hover:text-blue-600">Workout</a>
+        <a href="diet.html" class="text-gray-600 hover:text-blue-600">Diet</a>
+        <a href="progress.html" class="text-blue-600 font-semibold">Progress</a>
+        <a href="telemedicine.html" class="text-gray-600 hover:text-blue-600">Telemedicine</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Your Progress</h1>
+    
+    <div class="grid md:grid-cols-2 gap-8 mb-8">
+      <!-- Goals Summary -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Goal Progress</h2>
+        
+        <div class="mb-6">
+          <div class="flex justify-between mb-2">
+            <span>Workout Completion</span>
+            <span>75%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 75%"></div>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <div class="flex justify-between mb-2">
+            <span>Nutrition Goals</span>
+            <span>60%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-green-600 h-2.5 rounded-full" style="width: 60%"></div>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <div class="flex justify-between mb-2">
+            <span>Overall Progress</span>
+            <span>68%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-purple-600 h-2.5 rounded-full" style="width: 68%"></div>
+          </div>
+        </div>
+        
+        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <i class="fas fa-pencil-alt mr-2"></i> Adjust Goals
+        </button>
+      </div>
+      
+      <!-- Weekly Activity -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Weekly Activity</h2>
+        <canvas id="activityChart" height="200"></canvas>
+      </div>
+    </div>
+    
+    <!-- Workout History -->
+    <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">Workout History</h2>
+        <button id="exportData" class="bg-gray-200 text-gray-700 px-4 py-2 rounded text-sm hover:bg-gray-300">
+          <i class="fas fa-download mr-2"></i> Export Data
+        </button>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 text-left">Date</th>
+              <th class="p-3 text-left">Workout</th>
+              <th class="p-3 text-left">Duration</th>
+              <th class="p-3 text-left">Calories</th>
+              <th class="p-3 text-left">Heart Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="p-3">2024-03-15</td>
+              <td class="p-3">Full Body Circuit</td>
+              <td class="p-3">45 min</td>
+              <td class="p-3">320 kcal</td>
+              <td class="p-3">142 BPM</td>
+            </tr>
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="p-3">2024-03-14</td>
+              <td class="p-3">Upper Body Strength</td>
+              <td class="p-3">35 min</td>
+              <td class="p-3">280 kcal</td>
+              <td class="p-3">135 BPM</td>
+            </tr>
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="p-3">2024-03-12</td>
+              <td class="p-3">Yoga Flow</td>
+              <td class="p-3">50 min</td>
+              <td class="p-3">210 kcal</td>
+              <td class="p-3">118 BPM</td>
+            </tr>
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              <td class="p-3">2024-03-10</td>
+              <td class="p-3">HIIT Session</td>
+              <td class="p-3">30 min</td>
+              <td class="p-3">350 kcal</td>
+              <td class="p-3">155 BPM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Body Metrics -->
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Body Metrics</h2>
+      
+      <div class="grid md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="font-semibold mb-2">Weight</h3>
+          <div class="flex items-end">
+            <span class="text-3xl font-bold">72.5</span>
+            <span class="ml-1 text-gray-600">kg</span>
+          </div>
+          <div class="text-sm text-green-600 mt-1">
+            <i class="fas fa-arrow-down mr-1"></i> 1.2 kg decrease
+          </div>
+        </div>
+        
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="font-semibold mb-2">Body Fat %</h3>
+          <div class="flex items-end">
+            <span class="text-3xl font-bold">18.2</span>
+            <span class="ml-1 text-gray-600">%</span>
+          </div>
+          <div class="text-sm text-green-600 mt-1">
+            <i class="fas fa-arrow-down mr-1"></i> 0.8% decrease
+          </div>
+        </div>
+        
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="font-semibold mb-2">Muscle Mass</h3>
+          <div class="flex items-end">
+            <span class="text-3xl font-bold">35.1</span>
+            <span class="ml-1 text-gray-600">kg</span>
+          </div>
+          <div class="text-sm text-green-600 mt-1">
+            <i class="fas fa-arrow-up mr-1"></i> 0.5 kg increase
+          </div>
+        </div>
+      </div>
+      
+      <canvas id="metricsChart" height="200"></canvas>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white py-8 shadow-lg mt-12">
+    <div class="container mx-auto px-4 text-center">
+      <div class="flex justify-center space-x-6 mb-6">
+        <a href="#" class="text-gray-500 hover:text-blue-600">
+          <i class="fab fa-facebook-f text-2xl"></i>
+        </a>
+        <a href="#" class="text-gray-500 hover:text-blue-600">
+          <i class="fab fa-twitter text-2xl"></i>
+        </a>
+        <a href="#" class="text-gray-500 hover:text-blue-600">
+          <i class="fab fa-instagram text-2xl"></i>
+        </a>
+      </div>
+      <p class="text-gray-500 text-sm">&copy; 2024 AI Fitness Coach. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Activity Chart
+    const activityCtx = document.getElementById('activityChart').getContext('2d');
+    const activityChart = new Chart(activityCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'Workout Minutes',
+          data: [45, 35, 0, 50, 30, 0, 60],
+          backgroundColor: 'rgba(59, 130, 246, 0.7)',
+          borderColor: 'rgba(59, 130, 246, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Minutes'
+            }
+          }
+        }
+      }
+    });
+
+    // Body Metrics Chart
+    const metricsCtx = document.getElementById('metricsChart').getContext('2d');
+    const metricsChart = new Chart(metricsCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+          {
+            label: 'Weight (kg)',
+            data: [75.2, 74.5, 73.8, 73.2, 72.8, 72.5],
+            borderColor: 'rgba(59, 130, 246, 1)',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            tension: 0.3,
+            fill: true
+          },
+          {
+            label: 'Body Fat %',
+            data: [20.1, 19.5, 19.0, 18.7, 18.4, 18.2],
+            borderColor: 'rgba(16, 185, 129, 1)',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.3,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: 'Value'
+            }
+          }
+        }
+      }
+    });
+
+    // Export data button
+    document.getElementById('exportData').addEventListener('click', function() {
+      alert('Data export functionality would connect to your wearable API here.');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+    "meals": [
+      {
+        "id": 1,
+        "name": "Quinoa Salad",
+        "category": "veg",
+        "type": "Whole Grains",
+        "calories": 320,
+        "image": "https://images.pexels.com/photos/3769394/pexels-photo-3769394.jpeg",
+        "description": "Nutritious quinoa with fresh vegetables and nuts."
+      },
+      {
+        "id": 2,
+        "name": "Chicken Curry",
+        "category": "non-veg", 
+        "type": "Proteins",
+        "calories": 450,
+        "image": "https://images.pexels.com/photos/260459/pexels-photo-260459.jpeg",
+        "description": "Spicy chicken curry with coconut milk and herbs."
+      },
+      {
+        "id": 3,
+        "name": "Almond Butter Toast",
+        "category": "veg",
+        "type": "Nuts",
+        "calories": 280,
+        "image": "https://images.pexels.com/photos/461381/pexels-photo-461381.jpeg",
+        "description": "Whole grain toast with almond butter and banana."
+      },
+      {
+        "id": 4,
+        "name": "Grilled Salmon",
+        "category": "non-veg",
+        "type": "Proteins",
+        "calories": 380,
+        "image": "https://images.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg",
+        "description": "Fresh salmon with lemon and herbs."
+      },
+      {
+        "id": 5,
+        "name": "Brown Rice Bowl",
+        "category": "veg",
+        "type": "Whole Grains",
+        "calories": 350,
+        "image": "https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg",
+        "description": "Brown rice with mixed vegetables and tofu."
+      }
+    ]
+  }

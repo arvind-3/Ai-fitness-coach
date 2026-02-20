@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Macro Calculator</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="../js/macro.js" defer></script>
+</head>
+<body class="bg-gray-100 text-gray-800 p-6">
+  <h1 class="text-2xl font-bold mb-4">Macro Calculator</h1>
+
+  <div class="space-y-4 max-w-md mx-auto">
+    <label class="block">Total Daily Calories:
+      <input type="number" id="totalCalories" class="border p-2 rounded w-full" placeholder="e.g., 2200">
+    </label>
+
+    <label class="block">Fitness Goal:
+      <select id="goal" class="border p-2 rounded w-full">
+        <option value="cutting">Cutting (Fat Loss)</option>
+        <option value="maintenance">Maintenance</option>
+        <option value="bulking">Bulking (Muscle Gain)</option>
+      </select>
+    </label>
+
+    <button onclick="calculateMacros()" class="bg-purple-600 text-white px-4 py-2 rounded">Calculate</button>
+
+    <div id="macroResult" class="mt-4 p-4 bg-white rounded shadow text-lg"></div>
+  </div>
+</body>
+</html>

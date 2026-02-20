@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet | AI Fitness Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/shared.css">
+    <style>
+        .meal-card {
+            transition: all 0.3s ease;
+        }
+        .veg-badge {
+            background-color: #ECFDF5;
+            color: #065F46;
+        }
+        .nonveg-badge {
+            background-color: #FEE2E2;
+            color: #B91C1C;
+        }
+        .meal-filter.active {
+            background-color: #10B981;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation and other existing content... -->
+
+    <!-- AI Meal Recommendations -->
+    <div class="mt-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Today's Meal Plan</h2>
+            <button class="btn-primary">
+                <i class="fas fa-sync-alt mr-2"></i> Regenerate
+            </button>
+        </div>
+        
+        <!-- Veg/Non-Veg Filter -->
+        <div class="flex mb-6 space-x-2">
+            <button class="meal-filter active px-4 py-2 rounded-lg font-medium" data-filter="all">
+                <i class="fas fa-utensils mr-2"></i> All Meals
+            </button>
+            <button class="meal-filter px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium" data-filter="veg">
+                <i class="fas fa-leaf mr-2 text-green-500"></i> Vegetarian
+            </button>
+            <button class="meal-filter px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-medium" data-filter="non-veg">
+                <i class="fas fa-drumstick-bite mr-2 text-red-500"></i> Non-Vegetarian
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Breakfast (Veg) -->
+            <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="veg">
+                <div class="bg-green-100 p-4">
+                    <h3 class="font-bold text-green-800 flex items-center">
+                        <i class="fas fa-egg mr-2"></i> Breakfast
+                        <span class="veg-badge ml-auto px-2 py-1 text-xs rounded-full">
+                            <i class="fas fa-leaf mr-1"></i> Veg
+                        </span>
+                    </h3>
+                </div>
+                <!-- Meal content... -->
+            </div>
+
+            <!-- Lunch (Non-Veg) -->
+            <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="non-veg">
+                <div class="bg-blue-100 p-4">
+                    <h3 class="font-bold text-blue-800 flex items-center">
+                        <i class="fas fa-utensils mr-2"></i> Lunch
+                        <span class="nonveg-badge ml-auto px-2 py-1 text-xs rounded-full">
+                            <i class="fas fa-drumstick-bite mr-1"></i> Non-Veg
+                        </span>
+                    </h3>
+                </div>
+                <!-- Meal content... -->
+            </div>
+
+            <!-- Dinner (Non-Veg) -->
+            <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden" data-meal-type="non-veg">
+                <div class="bg-purple-100 p-4">
+                    <h3 class="font-bold text-purple-800 flex items-center">
+                        <i class="fas fa-drumstick-bite mr-2"></i> Dinner
+                        <span class="nonveg-badge ml-auto px-2 py-1 text-xs rounded-full">
+                            <i class="fas fa-drumstick-bite mr-1"></i> Non-Veg
+                        </span>
+                    </h3>
+                </div>
+                <!-- Meal content... -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Meal Filtering
+        class MealFilter {
+            constructor() {
+                this.filters = document.querySelectorAll('.meal-filter');
+                this.mealCards = document.querySelectorAll('.meal-card');
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.filterMeals('all');
+            }
+
+            setupEventListeners() {
+                this.filters.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const filter = button.dataset.filter;
+                        this.filterMeals(filter);
+                    });
+                });
+            }
+
+            filterMeals(filter) {
+                // Update button states
+                this.updateButtonStates(filter);
+                
+                // Filter meals with animation
+                this.mealCards.forEach(card => {
+                    card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(10px)';
+                    
+                    setTimeout(() => {
+                        const shouldShow = filter === 'all' || 
+                                         card.dataset.mealType === filter;
+                        card.style.display = shouldShow ? 'block' : 'none';
+                        
+                        if (shouldShow) {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }
+                    }, 50);
+                });
+            }
+
+            updateButtonStates(activeFilter) {
+                this.filters.forEach(button => {
+                    if (button.dataset.filter === activeFilter) {
+                        button.classList.add('active');
+                        button.classList.remove('bg-gray-200', 'text-gray-700');
+                    } else {
+                        button.classList.remove('active');
+                        button.classList.add('bg-gray-200', 'text-gray-700');
+                    }
+                });
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new MealFilter();
+            
+            // Existing functionality...
+            const backToTopButton = document.getElementById('backToTop');
+            // ... (rest of existing JS)
+        });
+    </script>
+</body>
+</html>

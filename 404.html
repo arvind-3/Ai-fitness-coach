@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet | AI Fitness Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/shared.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .meal-card {
+            transition: all 0.3s ease;
+        }
+        .meal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .nutrition-fact {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation with mobile menu -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <div>
+                        <a href="#" class="flex items-center py-4 px-2">
+                            <img src="https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                                 alt="Logo" class="h-8 w-8 mr-2 rounded-full">
+                            <span class="font-semibold text-gray-500 text-lg">AI Fitness Coach</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-green-500">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+                <!-- Desktop menu -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="index.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Home</a>
+                    <a href="dashboard.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Dashboard</a>
+                    <a href="workout.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Workout</a>
+                    <a href="diet.html" class="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold">Diet</a>
+                    <a href="telemedicine.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Telemedicine</a>
+                    <a href="settings.html" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Settings</a>
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="mobile-menu hidden md:hidden px-2 pt-2 pb-3">
+                <a href="index.html" class="block py-2 px-3 text-green-500 rounded hover:bg-gray-100">Home</a>
+                <a href="dashboard.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Dashboard</a>
+                <a href="workout.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Workout</a>
+                <a href="diet.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Diet</a>
+                <a href="telemedicine.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Telemedicine</a>
+                <a href="settings.html" class="block py-2 px-3 text-gray-500 rounded hover:bg-gray-100">Settings</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- AI Nutrition Dashboard -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Your AI Nutrition Plan</h1>
+            <p class="mt-2 text-gray-600">Personalized meal recommendations based on your fitness goals and preferences</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Daily Nutrition Summary -->
+            <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-1">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Today's Nutrition</h2>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Calories</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <p class="text-2xl font-bold">1,850</p>
+                            <p class="text-sm text-gray-500">of 2,200 goal</p>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 84%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 pt-4">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Protein</p>
+                            <p class="text-lg font-bold">145g</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Carbs</p>
+                            <p class="text-lg font-bold">210g</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Fat</p>
+                            <p class="text-lg font-bold">65g</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Macro Nutrient Chart -->
+            <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-2">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Weekly Nutrition Trends</h2>
+                <canvas id="nutritionChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- AI Meal Recommendations -->
+        <div class="mt-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">Today's Meal Plan</h2>
+                <button class="btn-primary">
+                    <i class="fas fa-sync-alt mr-2"></i> Regenerate
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Breakfast -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="bg-green-100 p-4">
+                        <h3 class="font-bold text-green-800 flex items-center">
+                            <i class="fas fa-egg mr-2"></i> Breakfast
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                                 alt="Greek Yogurt" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Greek Yogurt Parfait</h4>
+                                <p class="text-sm text-gray-500">450 kcal | 35g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 cup Greek yogurt
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/2 cup mixed berries
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 tbsp honey
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/4 cup granola
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Lunch -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="bg-blue-100 p-4">
+                        <h3 class="font-bold text-blue-800 flex items-center">
+                            <i class="fas fa-utensils mr-2"></i> Lunch
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                                 alt="Chicken Salad" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Grilled Chicken Salad</h4>
+                                <p class="text-sm text-gray-500">600 kcal | 45g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                6 oz grilled chicken
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                2 cups mixed greens
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/4 avocado
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 tbsp olive oil dressing
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Dinner -->
+                <div class="meal-card bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="bg-purple-100 p-4">
+                        <h3 class="font-bold text-purple-800 flex items-center">
+                            <i class="fas fa-drumstick-bite mr-2"></i> Dinner
+                        </h3>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-start mb-3">
+                            <img src="https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                                 alt="Salmon" class="w-16 h-16 rounded-md object-cover mr-3">
+                            <div>
+                                <h4 class="font-medium">Baked Salmon</h4>
+                                <p class="text-sm text-gray-500">700 kcal | 50g protein</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                6 oz salmon fillet
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 cup roasted vegetables
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1/2 cup quinoa
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                                1 tsp lemon butter sauce
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Logging -->
+        <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Log Your Meals</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <div class="relative">
+                        <input type="text" placeholder="Search foods..." 
+                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <button class="absolute right-3 top-3 text-gray-400 hover:text-green-500">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div class="mt-4 space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="font-medium">Chicken Breast</p>
+                                <p class="text-sm text-gray-500">100g | 165 kcal</p>
+                            </div>
+                            <button class="text-green-500 hover:text-green-700">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="font-medium">Brown Rice</p>
+                                <p class="text-sm text-gray-500">1 cup | 215 kcal</p>
+                            </div>
+                            <button class="text-green-500 hover:text-green-700">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div>
+                                <p class="font-medium">Broccoli</p>
+                                <p class="text-sm text-gray-500">1 cup | 55 kcal</p>
+                            </div>
+                            <button class="text-green-500 hover:text-green-700">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-700 mb-3">Today's Food Log</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div>
+                                <p class="font-medium">Greek Yogurt</p>
+                                <p class="text-sm text-gray-500">1 cup | 150 kcal</p>
+                            </div>
+                            <button class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div>
+                                <p class="font-medium">Almonds</p>
+                                <p class="text-sm text-gray-500">1 oz | 160 kcal</p>
+                            </div>
+                            <button class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-gray-100 rounded-lg">
+                        <p class="text-sm text-gray-700">Total logged: 310 kcal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <button id="backToTop" class="fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-green-600">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Back to top functionality
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Nutrition Chart
+        const ctx = document.getElementById('nutritionChart').getContext('2d');
+        const nutritionChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [
+                    {
+                        label: 'Protein (g)',
+                        data: [120, 135, 130, 140, 145, 130, 125],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Carbs (g)',
+                        data: [180, 190, 200, 210, 200, 220, 230],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Fat (g)',
+                        data: [50, 55, 60, 65, 60, 70, 65],
+                        borderColor: '#F59E0B',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Mock AI meal regeneration
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-sync-alt mr-2"></i> Regenerate';
+                // In a real app, this would fetch new meal recommendations
+                alert('New AI-generated meal plan created based on your preferences!');
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

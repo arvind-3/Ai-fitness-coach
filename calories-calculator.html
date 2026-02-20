@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calories Calculator</title>
+  <link rel="stylesheet" href="../style.css">
+  <script src="../js/calculator.js" defer></script>
+</head>
+<body class="bg-gray-100 text-gray-800 p-6">
+  <h1 class="text-2xl font-bold mb-4">Daily Calorie Calculator</h1>
+  
+  <div class="space-y-4 max-w-md mx-auto">
+    <label class="block">Gender:
+      <select id="gender" class="border p-2 rounded w-full">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </label>
+
+    <label class="block">Age:
+      <input type="number" id="age" class="border p-2 rounded w-full" placeholder="e.g., 22" />
+    </label>
+
+    <label class="block">Weight (kg):
+      <input type="number" id="weight" class="border p-2 rounded w-full" placeholder="e.g., 70" />
+    </label>
+
+    <label class="block">Height (cm):
+      <input type="number" id="height" class="border p-2 rounded w-full" placeholder="e.g., 175" />
+    </label>
+
+    <label class="block">Activity Level:
+      <select id="activity" class="border p-2 rounded w-full">
+        <option value="1.2">Sedentary</option>
+        <option value="1.375">Light Activity</option>
+        <option value="1.55">Moderate Activity</option>
+        <option value="1.725">Very Active</option>
+        <option value="1.9">Super Active</option>
+      </select>
+    </label>
+
+    <button onclick="calculateCalories()" class="bg-green-600 text-white px-4 py-2 rounded">Calculate</button>
+
+    <div id="result" class="mt-4 p-4 bg-white rounded shadow text-lg"></div>
+  </div>
+
+</body>
+</html>
