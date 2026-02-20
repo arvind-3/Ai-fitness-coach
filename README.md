@@ -9,7 +9,8 @@ Key Focus Areas: Real-time ML inference, UI responsiveness, user experience, mod
 Contributions are welcome. If you find any issues or have suggestions for improvement, please open an issue or submit a pull request.
 
   
- linkedln [![LinkedIn](https://www.linkedin.com/in/arvind-shyam?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)]
+ linkedln
+ [![LinkedIn](https://www.linkedin.com/in/arvind-shyam?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)]
 
     Instagram
 [![Instagram](https://www.instagram.com/itz_arvi.01/#)](https://www.instagram.com/itz_arvi.01/#)
