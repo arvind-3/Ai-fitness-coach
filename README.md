@@ -14,7 +14,6 @@ Contributions are welcome. If you find any issues or have suggestions for improv
  [![LinkedIn](https://www.linkedin.com/in/arvind-shyam?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)]
 
     Instagram
-    Arvind
-[![Instagram](https://www.instagram.com/itz_arvi.01/#)](https://www.instagram.com/itz_arvi.01/#)
+
 
 
